@@ -1,10 +1,14 @@
 import React from 'react';
 import Greetings from './Greetings';
+import style from './style';
+import TextField from './TextField';
 
 class SimpleForm extends React.Component{
     state = {
         firstName: "",
-        firstNameError: ""
+        firstNameError: "",
+        lastName: "",
+        lastNameError: ""
     };
 
     validateName = name => {
@@ -21,27 +25,42 @@ class SimpleForm extends React.Component{
         return this.setState({ firstNameError });        
     };
 
+    onLastNameBlur = () => {
+        const lastName = this.state.lastName;
+        const lastNameError = this.validateName(lastName);
+        return this.setState({ lastNameError });        
+    };
+
     onFirstNameChange = event =>
     this.setState({
         firstName: event.target.value
     });
 
+    onLastNameChange = event =>
+    this.setState({
+        lastName: event.target.value
+    });
+
     render(){
-        //const {firstNameError, firstName} = this.state;
-        const firstNameError = this.state.firstNameError;
-        const firstName = this.state.firstName;
+        const {firstNameError, firstName, lastName, lastNameError} = this.state;
+        //const firstNameError = this.state.firstNameError;
+        //const firstName = this.state.firstName;
 
         return(
-            <div>
-                <div>
-                    <label>
-                        First Name: &nbsp;
-                        <input type="text" name="firstName" onChange={this.onFirstNameChange} onBlur={this.onFirstNameBlur} />
-                        {firstNameError && <div>{firstNameError}</div>}
-                    </label>
-                </div>
+            <div style={style.form}>
+                <TextField name="firstName" 
+                    label="First Name " 
+                    onChange={this.onFirstNameChange}
+                    onBlur={this.onFirstNameBlur} 
+                    error={firstNameError}></TextField>
+
+                <TextField name="lastName" 
+                    label="Last Name " 
+                    onChange={this.onLastNameChange}
+                    onBlur={this.onLastNameBlur} 
+                    error={lastNameError}></TextField>
                 
-                <Greetings firstName={firstName} />
+                <Greetings firstName={firstName} lastName={lastName}/>
             </div>
         );
     }
